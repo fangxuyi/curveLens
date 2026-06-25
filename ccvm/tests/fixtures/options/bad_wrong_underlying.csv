@@ -1,0 +1,7 @@
+trade_date,option_expiry,underlying_contract,underlying_delivery_month,strike,call_put,settlement,volume,open_interest,exercise_style
+2024-01-02,2024-01-16,CLH24,2024-03,70.00,C,3.41,3200,18700,American
+2024-01-02,2024-01-16,CLH24,2024-03,72.00,C,2.10,4100,22300,American
+2024-01-02,2024-01-16,CLH24,2024-03,74.00,C,1.18,2900,16800,American
+2024-01-02,2024-01-16,CLH24,2024-03,68.00,P,0.32,900,6800,American
+2024-01-02,2024-01-16,CLH24,2024-03,70.00,P,0.71,1600,10200,American
+2024-01-02,2024-01-16,CLH24,2024-03,72.00,P,1.40,2200,14500,American

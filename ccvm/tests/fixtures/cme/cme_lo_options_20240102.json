@@ -1,0 +1,29 @@
+{
+  "tradeDate": "01/02/2024",
+  "settlements": [
+    {"expirationDate": "JAN 24", "strike": "68.00", "type": "CALL", "settle": "5.02", "change": "+0.45", "volume": "1,800", "openInterest": "12,400", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "70.00", "type": "CALL", "settle": "3.41", "change": "+0.38", "volume": "3,200", "openInterest": "18,700", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "72.00", "type": "CALL", "settle": "2.10", "change": "+0.28", "volume": "4,100", "openInterest": "22,300", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "74.00", "type": "CALL", "settle": "1.18", "change": "+0.15", "volume": "2,900", "openInterest": "16,800", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "76.00", "type": "CALL", "settle": "0.61", "change": "+0.08", "volume": "1,400", "openInterest": "9,200", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "70.00", "type": "PUT", "settle": "0.71", "change": "-0.32", "volume": "1,600", "openInterest": "10,200", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "72.00", "type": "PUT", "settle": "1.40", "change": "-0.42", "volume": "2,200", "openInterest": "14,500", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "74.00", "type": "PUT", "settle": "2.48", "change": "-0.55", "volume": "1,800", "openInterest": "11,200", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "68.00", "type": "CALL", "settle": "5.58", "change": "+0.42", "volume": "980", "openInterest": "7,800", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "70.00", "type": "CALL", "settle": "4.10", "change": "+0.35", "volume": "1,450", "openInterest": "11,200", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "72.00", "type": "CALL", "settle": "2.88", "change": "+0.25", "volume": "2,100", "openInterest": "15,600", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "74.00", "type": "CALL", "settle": "1.92", "change": "+0.15", "volume": "1,680", "openInterest": "12,400", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "76.00", "type": "CALL", "settle": "1.21", "change": "+0.08", "volume": "820", "openInterest": "7,100", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "70.00", "type": "PUT", "settle": "0.88", "change": "-0.35", "volume": "1,100", "openInterest": "8,900", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "FEB 24", "strike": "72.00", "type": "PUT", "settle": "1.65", "change": "-0.48", "volume": "1,580", "openInterest": "12,100", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "68.00", "type": "CALL", "settle": "6.10", "change": "+0.38", "volume": "420", "openInterest": "3,800", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "70.00", "type": "CALL", "settle": "4.72", "change": "+0.30", "volume": "680", "openInterest": "5,600", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "72.00", "type": "CALL", "settle": "3.52", "change": "+0.22", "volume": "920", "openInterest": "7,400", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "74.00", "type": "CALL", "settle": "2.52", "change": "+0.14", "volume": "740", "openInterest": "5,800", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "76.00", "type": "CALL", "settle": "1.72", "change": "+0.08", "volume": "380", "openInterest": "3,200", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "70.00", "type": "PUT", "settle": "1.02", "change": "-0.30", "volume": "520", "openInterest": "4,200", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "MAR 24", "strike": "72.00", "type": "PUT", "settle": "1.82", "change": "-0.42", "volume": "720", "openInterest": "5,800", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "78.00", "type": "CALL", "settle": "0.00", "change": "-", "volume": "0", "openInterest": "120", "updated": "01/02/2024 17:30 CT"},
+    {"expirationDate": "JAN 24", "strike": "80.00", "type": "CALL", "settle": "-", "change": "-", "volume": "0", "openInterest": "45", "updated": "01/02/2024 17:30 CT"}
+  ]
+}

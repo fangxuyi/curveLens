@@ -1,0 +1,41 @@
+market:
+  name: WTI Crude Oil
+  exchange: NYMEX
+  product_code: CL
+  currency: USD
+  price_unit: USD/BBL
+  contract_multiplier: 1000
+  tick_size: 0.01
+
+  # Month letter codes for futures contracts
+  month_codes:
+    F: 1   # January
+    G: 2   # February
+    H: 3   # March
+    J: 4   # April
+    K: 5   # May
+    M: 6   # June
+    N: 7   # July
+    Q: 8   # August
+    U: 9   # September
+    V: 10  # October
+    X: 11  # November
+    Z: 12  # December
+
+  # Option parameters
+  options:
+    exercise_style: American
+    settlement_style: Futures
+    # Option expiry: typically 3rd business day prior to 25th of month before delivery
+    expiry_rule: "3rd_business_day_before_25th_of_prior_month"
+
+  # MVP scope: first 8-12 monthly contracts
+  futures_depth: 12
+  # MVP scope: first 3-5 liquid expiries
+  options_expiry_depth: 5
+  min_strikes_per_expiry: 5
+  warn_strikes_below: 5
+  fail_strikes_below: 3
+
+  # Quality thresholds
+  max_daily_move_pct: 15.0  # warn if settlement moves more than this %

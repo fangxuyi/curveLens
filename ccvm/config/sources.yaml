@@ -1,0 +1,39 @@
+sources:
+  csv_wti_futures_bootstrap:
+    tier: manual_sample
+    cadence: manual
+    format: csv
+    license_note: "Tier 0 fixture data for schema development and testing; never mixed with production records"
+
+  cme_wti_futures_settlement:
+    tier: public_bootstrap
+    cadence: daily
+    expected_after: "18:00 America/Chicago"
+    format: json
+    endpoint: "https://www.cmegroup.com/CmeWS/mvc/Settlements/futures/tradeDate/{YYYYMMDD}/productCode/CL/code/fut/pageSize/50/isProtected"
+    product_code: CL
+    collector_class: "ccvm.collectors.cme_futures.CMEFuturesCollector"
+    license_note: "prototype/manual verification; review CME terms before automated production use"
+
+  cme_wti_option_settlement:
+    tier: public_bootstrap
+    cadence: daily
+    expected_after: "18:00 America/Chicago"
+    format: json
+    endpoint: "https://www.cmegroup.com/CmeWS/mvc/Settlements/options/tradeDate/{YYYYMMDD}/productCode/LO/code/OOF/pageSize/500/isProtected"
+    product_code: LO
+    collector_class: "ccvm.collectors.cme_options.CMEOptionsCollector"
+    license_note: "prototype/manual verification; review CME terms before automated production use"
+
+  eia_api_v2:
+    tier: official_open_api
+    cadence: weekly_and_monthly
+    requires_api_key: true
+    base_url: "https://api.eia.gov/v2"
+    license_note: "EIA Open Data — free for non-commercial and research use"
+
+  cftc_cot:
+    tier: official_open_file
+    cadence: weekly
+    format: csv_zip
+    license_note: "CFTC public data"

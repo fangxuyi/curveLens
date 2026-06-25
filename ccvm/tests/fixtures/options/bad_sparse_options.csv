@@ -1,0 +1,3 @@
+trade_date,option_expiry,underlying_contract,underlying_delivery_month,strike,call_put,settlement,volume,open_interest,exercise_style
+2024-01-02,2024-01-16,CLG24,2024-02,70.00,C,3.41,3200,18700,American
+2024-01-02,2024-01-16,CLG24,2024-02,74.00,C,1.18,2900,16800,American
