@@ -1,0 +1,18 @@
+{
+  "tradeDate": "01/02/2024",
+  "settlements": [
+    {"month": "FEB 24", "open": "72.40", "high": "73.15", "low": "72.25", "last": "72.65", "change": "+0.82", "settle": "72.70", "estimatedVolume": "285,432", "previousVolume": "243,218", "openInterest": "443,521", "previousOpenInterest": "441,832", "updated": "01/02/2024 17:30 CT"},
+    {"month": "MAR 24", "open": "71.98", "high": "72.65", "low": "71.80", "last": "72.20", "change": "+0.78", "settle": "72.28", "estimatedVolume": "94,120", "previousVolume": "76,890", "openInterest": "189,234", "previousOpenInterest": "188,900", "updated": "01/02/2024 17:30 CT"},
+    {"month": "APR 24", "open": "71.50", "high": "72.10", "low": "71.35", "last": "71.72", "change": "+0.70", "settle": "71.80", "estimatedVolume": "48,230", "previousVolume": "38,100", "openInterest": "98,765", "previousOpenInterest": "98,200", "updated": "01/02/2024 17:30 CT"},
+    {"month": "MAY 24", "open": "71.05", "high": "71.68", "low": "70.92", "last": "71.28", "change": "+0.62", "settle": "71.37", "estimatedVolume": "32,100", "previousVolume": "25,400", "openInterest": "62,100", "previousOpenInterest": "61,800", "updated": "01/02/2024 17:30 CT"},
+    {"month": "JUN 24", "open": "70.68", "high": "71.30", "low": "70.55", "last": "70.90", "change": "+0.55", "settle": "71.00", "estimatedVolume": "21,400", "previousVolume": "16,800", "openInterest": "44,300", "previousOpenInterest": "44,100", "updated": "01/02/2024 17:30 CT"},
+    {"month": "JUL 24", "open": "70.38", "high": "71.00", "low": "70.22", "last": "70.58", "change": "+0.48", "settle": "70.68", "estimatedVolume": "14,200", "previousVolume": "11,100", "openInterest": "31,200", "previousOpenInterest": "31,000", "updated": "01/02/2024 17:30 CT"},
+    {"month": "AUG 24", "open": "70.12", "high": "70.72", "low": "69.98", "last": "70.30", "change": "+0.42", "settle": "70.40", "estimatedVolume": "9,520", "previousVolume": "7,400", "openInterest": "22,400", "previousOpenInterest": "22,200", "updated": "01/02/2024 17:30 CT"},
+    {"month": "SEP 24", "open": "69.88", "high": "70.48", "low": "69.75", "last": "70.05", "change": "+0.38", "settle": "70.15", "estimatedVolume": "6,810", "previousVolume": "5,200", "openInterest": "16,800", "previousOpenInterest": "16,600", "updated": "01/02/2024 17:30 CT"},
+    {"month": "OCT 24", "open": "69.65", "high": "70.25", "low": "69.52", "last": "69.83", "change": "+0.35", "settle": "69.93", "estimatedVolume": "4,210", "previousVolume": "3,100", "openInterest": "12,600", "previousOpenInterest": "12,400", "updated": "01/02/2024 17:30 CT"},
+    {"month": "NOV 24", "open": "69.45", "high": "70.05", "low": "69.32", "last": "69.64", "change": "+0.32", "settle": "69.74", "estimatedVolume": "2,910", "previousVolume": "2,100", "openInterest": "9,800", "previousOpenInterest": "9,650", "updated": "01/02/2024 17:30 CT"},
+    {"month": "DEC 24", "open": "69.28", "high": "69.88", "low": "69.15", "last": "69.47", "change": "+0.28", "settle": "69.57", "estimatedVolume": "2,110", "previousVolume": "1,600", "openInterest": "7,700", "previousOpenInterest": "7,580", "updated": "01/02/2024 17:30 CT"},
+    {"month": "JAN 25", "open": "69.12", "high": "69.72", "low": "69.00", "last": "69.31", "change": "+0.25", "settle": "69.41", "estimatedVolume": "1,810", "previousVolume": "1,300", "openInterest": "6,200", "previousOpenInterest": "6,100", "updated": "01/02/2024 17:30 CT"},
+    {"month": "TOTAL", "open": "-", "high": "-", "low": "-", "last": "-", "change": "-", "settle": "-", "estimatedVolume": "522,853", "previousVolume": "428,308", "openInterest": "944,619", "previousOpenInterest": "940,360", "updated": "01/02/2024 17:30 CT"}
+  ]
+}

@@ -2,7 +2,9 @@
 """Run CCVM data collection for a given date.
 
 Usage:
-    python scripts/collect_day.py --date 2024-01-02 --source csv_futures
+    python scripts/collect_day.py --date 2024-01-02 --source cme_futures
+    python scripts/collect_day.py --date 2024-01-02 --source cme_options
+    python scripts/collect_day.py --date 2024-01-02 --source eia
     python scripts/collect_day.py --date 2024-01-02 --source all
 """
 from __future__ import annotations
@@ -16,6 +18,8 @@ from pathlib import Path
 # Add src to path when run directly
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+from ccvm.collectors.cme_futures import CMEFuturesCollector
+from ccvm.collectors.cme_options import CMEOptionsCollector
 from ccvm.collectors.csv_futures import CSVFuturesCollector
 from ccvm.collectors.eia import EIACollector
 from ccvm.storage.manifest_db import ManifestDB
@@ -34,9 +38,9 @@ def main() -> None:
     parser.add_argument("--date", required=True, help="Trade date (YYYY-MM-DD)")
     parser.add_argument(
         "--source",
-        choices=["csv_futures", "eia", "all"],
+        choices=["csv_futures", "eia", "cme_futures", "cme_options", "all"],
         default="all",
-        help="Which collector(s) to run",
+        help="Which collector(s) to run (default: all)",
     )
     args = parser.parse_args()
 
@@ -51,17 +55,29 @@ def main() -> None:
 
     results = {}
 
-    if args.source in ("csv_futures", "all"):
-        collector = CSVFuturesCollector(FIXTURES_DIR, raw_store, manifest_db)
+    if args.source in ("cme_futures", "all"):
+        collector = CMEFuturesCollector(raw_store, manifest_db)
         result = collector.collect(as_of)
-        results["csv_futures"] = result
-        print(f"[csv_futures] {result}")
+        results["cme_futures"] = result
+        print(f"[cme_futures]  {result}")
+
+    if args.source in ("cme_options", "all"):
+        collector = CMEOptionsCollector(raw_store, manifest_db)
+        result = collector.collect(as_of)
+        results["cme_options"] = result
+        print(f"[cme_options]  {result}")
 
     if args.source in ("eia", "all"):
         collector = EIACollector(raw_store, manifest_db)
         result = collector.collect(as_of)
         results["eia"] = result
-        print(f"[eia]         {result}")
+        print(f"[eia]          {result}")
+
+    if args.source in ("csv_futures", "all"):
+        collector = CSVFuturesCollector(FIXTURES_DIR, raw_store, manifest_db)
+        result = collector.collect(as_of)
+        results["csv_futures"] = result
+        print(f"[csv_futures]  {result}")
 
     any_failure = any(r.get("status") == "failed" for r in results.values())
     sys.exit(1 if any_failure else 0)

@@ -9,13 +9,20 @@ sources:
     tier: public_bootstrap
     cadence: daily
     expected_after: "18:00 America/Chicago"
-    format: html_or_export
+    format: json
+    endpoint: "https://www.cmegroup.com/CmeWS/mvc/Settlements/futures/tradeDate/{YYYYMMDD}/productCode/CL/code/fut/pageSize/50/isProtected"
+    product_code: CL
+    collector_class: "ccvm.collectors.cme_futures.CMEFuturesCollector"
     license_note: "prototype/manual verification; review CME terms before automated production use"
 
   cme_wti_option_settlement:
     tier: public_bootstrap
     cadence: daily
-    format: html_or_export
+    expected_after: "18:00 America/Chicago"
+    format: json
+    endpoint: "https://www.cmegroup.com/CmeWS/mvc/Settlements/options/tradeDate/{YYYYMMDD}/productCode/LO/code/OOF/pageSize/500/isProtected"
+    product_code: LO
+    collector_class: "ccvm.collectors.cme_options.CMEOptionsCollector"
     license_note: "prototype/manual verification; review CME terms before automated production use"
 
   eia_api_v2:
