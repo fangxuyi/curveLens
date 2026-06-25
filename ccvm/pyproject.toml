@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ccvm"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.0",
+    "duckdb>=0.9",
+    "pyarrow>=14",
+    "httpx>=0.25",
+    "tenacity>=8",
+    "pyyaml>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-asyncio"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
