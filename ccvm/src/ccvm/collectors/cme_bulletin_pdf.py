@@ -3,8 +3,7 @@ CME Daily Bulletin PDF parser for LO (WTI crude oil) option settlements.
 
 Reads Section 63 Energy Options PDFs saved at data/cme_bulletin/<date>.pdf.
 Parses LO CALL and LO PUT sections and outputs records in the same bronze
-format as cme_options.py ({"settlements": [...]}) so that normalize_day.py
-picks them up unchanged.
+format {"settlements": [...]} so that normalize_day.py picks them up unchanged.
 
 PDF format (pdftotext -layout output):
   - "LO CALL  NYMEX CRUDE OIL OPTIONS (PHY)" marks the call section
@@ -17,7 +16,7 @@ Data row column order (left→right):
   | SETT_PRICE | [sign | UNCH] | PT_CHGE | DELTA | EXERCISES
   | OC_VOLUME | GLOBEX_VOLUME | PNT_VOLUME | OPEN_INTEREST | [OI_SIGN | UNCH] | OI_CHG
 
-Expiry convention (consistent with cme_options.py):
+Expiry convention:
   "AUG26" → option expires on 3rd Friday of August 2026
            → underlying = CL September 2026 (CLU26)
 """
@@ -63,8 +62,8 @@ def _expiry_code_to_option_info(code: str) -> tuple[date, str, str]:
     """
     'AUG26' → (option_expiry, underlying_contract, underlying_delivery_month)
 
-    Same convention as cme_options.py: label month = option expiry month
-    (3rd Friday), underlying = next calendar month's CL futures.
+    Label month = option expiry month (3rd Friday),
+    underlying = next calendar month's CL futures.
     """
     month_num = _MONTH_NAME_TO_NUM[code[:3].upper()]
     year = 2000 + int(code[3:])

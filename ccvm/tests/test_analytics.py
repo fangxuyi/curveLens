@@ -75,7 +75,7 @@ def _silver_options(n_strikes: int = 8, atm: float = 75.0, iv_level: float = 0.3
             rows["exercise_style"].append("American")
             rows["settlement_style"].append("Equity_ETF")
             rows["contract_multiplier"].append(100)
-            rows["source_id"].append("etrade_uso_options")
+            rows["source_id"].append("cme_bulletin_lo_option")
             rows["price_note"].append("USO_proxy")
             rows["raw_file_sha256"].append("abc")
             rows["silver_status"].append("PASS")

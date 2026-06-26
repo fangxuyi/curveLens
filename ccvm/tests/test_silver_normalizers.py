@@ -63,7 +63,7 @@ def _make_options_bronze(settlements: list[dict]) -> pa.Table:
         rows["exercise_style"].append("American")
         rows["settlement_style"].append("Equity_ETF")
         rows["contract_multiplier"].append(100)
-        rows["source_id"].append("etrade_uso_options")
+        rows["source_id"].append("cme_bulletin_lo_option")
         rows["price_note"].append("USO_proxy")
         rows["raw_file_sha256"].append(SHA)
     return pa.table(rows, schema=_SCHEMA)

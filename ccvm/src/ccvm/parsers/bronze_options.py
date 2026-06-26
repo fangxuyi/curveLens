@@ -1,4 +1,4 @@
-"""Parse raw options JSON (etrade_uso_options or barchart_wti_options) into bronze."""
+"""Parse raw options JSON (cme_bulletin_lo_option settlements) into bronze."""
 from __future__ import annotations
 
 import json
