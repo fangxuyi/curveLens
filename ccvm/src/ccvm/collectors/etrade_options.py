@@ -114,10 +114,10 @@ def _oauth1_auth_header(
     signature = base64.b64encode(digest).decode()
     oauth_params["oauth_signature"] = signature
 
-    # Build header string
-    parts = ", ".join(
-        f'{k}="{_pct_encode(v)}"' for k, v in sorted(oauth_params.items())
-    )
+    # Build header string — realm="" must come first (E*TRADE requirement)
+    header_parts = [('realm', '')]
+    header_parts += sorted((k, v) for k, v in oauth_params.items())
+    parts = ", ".join(f'{k}="{_pct_encode(v)}"' for k, v in header_parts)
     return f"OAuth {parts}"
 
 
@@ -192,13 +192,11 @@ class ETradeOptionsCollector:
         raw_store: RawStore,
         manifest_db: ManifestDB,
         max_expiries: int = 5,
-        no_of_strikes: int = 40,
         use_sandbox: bool | None = None,
     ) -> None:
         self.raw_store = raw_store
         self.manifest_db = manifest_db
         self.max_expiries = max_expiries
-        self.no_of_strikes = no_of_strikes
         use_sb = use_sandbox if use_sandbox is not None else bool(os.environ.get("ETRADE_SANDBOX"))
         self.base_url = _SANDBOX_BASE if use_sb else _LIVE_BASE
         self._tokens = _load_tokens()
@@ -218,7 +216,7 @@ class ETradeOptionsCollector:
 
     def _try_renew_token(self) -> None:
         """Call renewAccessToken — valid only in same calendar day as original auth."""
-        url = f"{self.base_url}/v1/oauth/renewAccessToken"
+        url = f"{self.base_url}/oauth/renewAccessToken"
         t = self._tokens
         auth = _oauth1_auth_header(
             url=url, method="GET",
@@ -252,8 +250,8 @@ class ETradeOptionsCollector:
             "expiryMonth": str(expiry_month),
             "chainType": "CALLPUT",
             "optionCategory": "STANDARD",
-            "noOfStrikes": str(self.no_of_strikes),
             "skipAdjusted": "true",
+            # No noOfStrikes — fetches the full exchange-listed strike range
         }
         resp = httpx.get(
             url,
