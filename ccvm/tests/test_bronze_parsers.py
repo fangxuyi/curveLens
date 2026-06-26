@@ -45,7 +45,7 @@ def futures_raw(tmp_path) -> Path:
 @pytest.fixture
 def options_raw(tmp_path) -> Path:
     data = {
-        "source": "etrade_uso_options",
+        "source": "cme_bulletin_lo_option",
         "underlying": "USO",
         "trade_date": "2026-06-24",
         "settlements": [
@@ -56,7 +56,7 @@ def options_raw(tmp_path) -> Path:
              "open_interest": 3000, "implied_volatility": 0.32, "delta": 0.52,
              "gamma": 0.04, "theta": -0.03, "vega": 0.12,
              "exercise_style": "American", "settlement_style": "Equity_ETF",
-             "contract_multiplier": 100, "source_id": "etrade_uso_options",
+             "contract_multiplier": 100, "source_id": "cme_bulletin_lo_option",
              "price_note": "USO_proxy"},
             {"trade_date": "2026-06-24", "option_expiry": "2026-07-18",
              "option_symbol": "USO260718P00075000", "underlying_contract": "USO",
@@ -65,11 +65,11 @@ def options_raw(tmp_path) -> Path:
              "open_interest": 2000, "implied_volatility": 0.34, "delta": -0.48,
              "gamma": 0.04, "theta": -0.03, "vega": 0.12,
              "exercise_style": "American", "settlement_style": "Equity_ETF",
-             "contract_multiplier": 100, "source_id": "etrade_uso_options",
+             "contract_multiplier": 100, "source_id": "cme_bulletin_lo_option",
              "price_note": "USO_proxy"},
         ],
     }
-    p = tmp_path / "etrade_uso_options_20260624.json"
+    p = tmp_path / "cme_bulletin_lo_option_20260624.json"
     p.write_text(json.dumps(data))
     return p
 
