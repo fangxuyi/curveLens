@@ -114,10 +114,10 @@ def _oauth1_auth_header(
     signature = base64.b64encode(digest).decode()
     oauth_params["oauth_signature"] = signature
 
-    # Build header string
-    parts = ", ".join(
-        f'{k}="{_pct_encode(v)}"' for k, v in sorted(oauth_params.items())
-    )
+    # Build header string — realm="" must come first (E*TRADE requirement)
+    header_parts = [('realm', '')]
+    header_parts += sorted((k, v) for k, v in oauth_params.items())
+    parts = ", ".join(f'{k}="{_pct_encode(v)}"' for k, v in header_parts)
     return f"OAuth {parts}"
 
 
@@ -218,7 +218,7 @@ class ETradeOptionsCollector:
 
     def _try_renew_token(self) -> None:
         """Call renewAccessToken — valid only in same calendar day as original auth."""
-        url = f"{self.base_url}/v1/oauth/renewAccessToken"
+        url = f"{self.base_url}/oauth/renewAccessToken"
         t = self._tokens
         auth = _oauth1_auth_header(
             url=url, method="GET",
