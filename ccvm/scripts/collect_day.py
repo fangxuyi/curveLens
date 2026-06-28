@@ -22,6 +22,10 @@ from pathlib import Path
 # Add src to path when run directly
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+# Load .env from the ccvm/ project root
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent / ".env")
+
 from ccvm.collectors.cme_bulletin_pdf import CMEBulletinPDFCollector
 from ccvm.collectors.csv_futures import CSVFuturesCollector
 from ccvm.collectors.eia import EIACollector
