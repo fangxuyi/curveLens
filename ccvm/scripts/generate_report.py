@@ -64,6 +64,11 @@ def main() -> None:
     if pq.exists("gold", "option_features", as_of_str):
         gold_opt = pq.read("gold", "option_features", as_of_str)
 
+    # ── Gold EIA features (optional) ──
+    gold_eia = None
+    if pq.exists("gold", "eia_features", as_of_str):
+        gold_eia = pq.read("gold", "eia_features", as_of_str)
+
     # ── Agreement ──
     agr_path = DATA_DIR / "gold" / "agreement" / f"trade_date={as_of_str}" / "agreement.json"
     if agr_path.exists():
@@ -98,6 +103,7 @@ def main() -> None:
         top_catalysts=catalysts,
         quality_report=quality_report,
         output_dir=output_dir,
+        gold_eia=gold_eia,
     )
 
     md_path = output_dir / f"{as_of_str}.md"

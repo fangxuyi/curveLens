@@ -136,6 +136,16 @@ def main() -> None:
             prior_atm_vals = [v for v in po_d.get("atm_iv", []) if v is not None]
             prior_atm_iv = prior_atm_vals[0] if prior_atm_vals else None
 
+    # ── EIA supply signal (optional) ──
+    eia_supply_signal = None
+    eia_scenario_trigger = None
+    if pq.exists("gold", "eia_features", as_of_str):
+        gold_eia = pq.read("gold", "eia_features", as_of_str)
+        ed = gold_eia.to_pydict()
+        eia_supply_signal = ed["supply_signal"][0] if ed["supply_signal"] else None
+        eia_scenario_trigger = ed["scenario_trigger"][0] if ed["scenario_trigger"] else None
+        logger.info("EIA supply signal: %s  trigger: %s", eia_supply_signal, eia_scenario_trigger)
+
     agr = agreement.classify(
         front_back_slope=slope_val,
         contango_flag=contango_val,
@@ -143,6 +153,8 @@ def main() -> None:
         atm_iv=atm_iv,
         prior_atm_iv=prior_atm_iv,
         prior_slope=prior_slope,
+        eia_supply_signal=eia_supply_signal,
+        eia_scenario_trigger=eia_scenario_trigger,
     )
     logger.info("Agreement state: %s (%s)", agr["state"], agr["confidence"])
     for ev in agr["evidence"]:
