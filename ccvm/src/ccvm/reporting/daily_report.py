@@ -35,6 +35,7 @@ def generate(
     top_catalysts: list[dict],
     quality_report: dict,
     output_dir: Path,
+    gold_eia: Optional[pa.Table] = None,
 ) -> dict:
     """
     Generate the daily report. Returns the report dict and writes files to output_dir.
@@ -44,6 +45,7 @@ def generate(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "sections": {
             "market_risk": _market_risk_section(gold_futures, gold_options),
+            "eia_fundamentals": _eia_section(gold_eia),
             "catalysts": _catalysts_section(top_catalysts),
             "agreement": agreement,
             "scenarios": scenarios,
@@ -101,6 +103,31 @@ def _market_risk_section(
         }
 
     return section
+
+
+def _eia_section(gold_eia: Optional[pa.Table]) -> dict:
+    if gold_eia is None or len(gold_eia) == 0:
+        return {"status": "unavailable"}
+    d = gold_eia.to_pydict()
+    return {
+        "status": "available",
+        "eia_period": d["eia_period"][0],
+        "crude_stocks_ex_spr_mbbl": d["crude_stocks_ex_spr"][0],
+        "cushing_stocks_mbbl": d["cushing_stocks"][0],
+        "crude_draw_mbbl": d["crude_draw"][0],
+        "cushing_draw_mbbl": d["cushing_draw"][0],
+        "crude_imports_mbbld": d["crude_imports"][0],
+        "crude_exports_mbbld": d["crude_exports"][0],
+        "net_imports_mbbld": d["net_imports"][0],
+        "refinery_utilization_pct": d["refinery_utilization_pct"][0],
+        "gasoline_stocks_mbbl": d["gasoline_stocks"][0],
+        "distillate_stocks_mbbl": d["distillate_stocks"][0],
+        "gasoline_draw_mbbl": d["gasoline_draw"][0],
+        "distillate_draw_mbbl": d["distillate_draw"][0],
+        "supply_signal": d["supply_signal"][0],
+        "cushing_signal": d["cushing_signal"][0],
+        "scenario_trigger": d["scenario_trigger"][0],
+    }
 
 
 def _catalysts_section(top_catalysts: list[dict]) -> dict:
@@ -177,6 +204,7 @@ def _render_markdown(report: dict) -> str:
 
     fut = s["market_risk"].get("futures", {})
     opt = s["market_risk"].get("options", {})
+    eia = s.get("eia_fundamentals", {})
     agr = s["agreement"]
     cats = s["catalysts"]
     scenarios = s["scenarios"]
@@ -211,8 +239,39 @@ def _render_markdown(report: dict) -> str:
             "",
         ]
 
-    # ── Section 2: Catalysts ──
-    lines += ["## 2. Upcoming Catalysts", ""]
+    # ── Section 2: EIA Fundamentals ──
+    lines += ["## 2. EIA Weekly Fundamentals", ""]
+    if eia.get("status") == "available":
+        draw = eia.get("crude_draw_mbbl")
+        cush_draw = eia.get("cushing_draw_mbbl")
+        util = eia.get("refinery_utilization_pct")
+        signal = eia.get("supply_signal", "neutral").upper()
+        trigger = eia.get("scenario_trigger", "none")
+        draw_str = f"{draw:+,.0f} MBBL" if draw is not None else "N/A"
+        cush_str = f"{cush_draw:+,.0f} MBBL" if cush_draw is not None else "N/A"
+        util_str = f"{util:.1f}%" if util is not None else "N/A"
+        net_imp = eia.get("net_imports_mbbld")
+        net_str = f"{net_imp:+.0f} MBBL/D" if net_imp is not None else "N/A"
+        lines += [
+            f"*Week ending {eia.get('eia_period', 'N/A')}*",
+            "",
+            f"| Metric | Value | WoW |",
+            f"|--------|-------|-----|",
+            f"| U.S. crude stocks (ex-SPR) | {eia.get('crude_stocks_ex_spr_mbbl') and f\"{eia['crude_stocks_ex_spr_mbbl']:,.0f} MBBL\" or 'N/A'} | **{draw_str}** |",
+            f"| Cushing stocks | {eia.get('cushing_stocks_mbbl') and f\"{eia['cushing_stocks_mbbl']:,.0f} MBBL\" or 'N/A'} | {cush_str} |",
+            f"| Refinery utilization | {util_str} | — |",
+            f"| Net imports | {net_str} | — |",
+            f"| Gasoline stocks | {eia.get('gasoline_stocks_mbbl') and f\"{eia['gasoline_stocks_mbbl']:,.0f} MBBL\" or 'N/A'} | {f\"{eia['gasoline_draw_mbbl']:+,.0f} MBBL\" if eia.get('gasoline_draw_mbbl') is not None else 'N/A'} |",
+            f"| Distillate stocks | {eia.get('distillate_stocks_mbbl') and f\"{eia['distillate_stocks_mbbl']:,.0f} MBBL\" or 'N/A'} | {f\"{eia['distillate_draw_mbbl']:+,.0f} MBBL\" if eia.get('distillate_draw_mbbl') is not None else 'N/A'} |",
+            "",
+            f"**Supply signal:** `{signal}`  |  **Scenario trigger:** `{trigger}`",
+            "",
+        ]
+    else:
+        lines.append("*EIA data not available for this date.*\n")
+
+    # ── Section 3: Catalysts ──
+    lines += ["## 3. Upcoming Catalysts", ""]
     if cats["count"] == 0:
         lines.append("*No catalyst events on record for this date.*\n")
     else:
@@ -228,7 +287,7 @@ def _render_markdown(report: dict) -> str:
         lines.append("")
 
     # ── Section 3: Agreement ──
-    lines += ["## 3. Futures-Options Agreement", ""]
+    lines += ["## 4. Futures-Options Agreement", ""]
     agr_state = agr.get("state", "insufficient_data")
     agr_conf = agr.get("confidence", "low")
     lines += [
@@ -241,7 +300,7 @@ def _render_markdown(report: dict) -> str:
     lines.append("")
 
     # ── Section 4: Scenarios ──
-    lines += ["## 4. Scenarios", ""]
+    lines += ["## 5. Scenarios", ""]
     for sc in scenarios:
         name = sc.get("name", "").upper()
         desc = sc.get("description", "")
@@ -271,7 +330,7 @@ def _render_markdown(report: dict) -> str:
         lines.append("")
 
     # ── Section 5: Triggers ──
-    lines += ["## 5. Confirmation / Invalidation Triggers", ""]
+    lines += ["## 6. Confirmation / Invalidation Triggers", ""]
     for sc in scenarios[:3]:  # bull/base/bear
         name = sc.get("name", "").upper()
         lines.append(f"**{name}**")
@@ -282,13 +341,13 @@ def _render_markdown(report: dict) -> str:
         lines.append("")
 
     # ── Section 6: Caveats ──
-    lines += ["## 6. Data Caveats", ""]
+    lines += ["## 7. Data Caveats", ""]
     for c in caveats:
         lines.append(f"- {c}")
     lines.append("")
 
     # ── Section 7: Next Review ──
-    lines += ["## 7. Next Review", ""]
+    lines += ["## 8. Next Review", ""]
     lines += [
         f"- **EIA release:** {next_rev.get('next_eia_release', 'N/A')}",
         f"- **Next catalyst date:** {next_rev.get('next_catalyst_date', 'N/A')} — {next_rev.get('next_catalyst_title', '')}",

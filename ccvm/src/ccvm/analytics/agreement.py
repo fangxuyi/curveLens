@@ -32,6 +32,8 @@ def classify(
     atm_iv: Optional[float],
     prior_atm_iv: Optional[float],        # prior day (may be None)
     prior_slope: Optional[float],
+    eia_supply_signal: Optional[str] = None,    # "draw" / "build" / "neutral" / None
+    eia_scenario_trigger: Optional[str] = None, # "bull_confirmed" / "bear_watch" / "bear_confirmed" / "none"
 ) -> dict:
     """
     Return a dict with:
@@ -87,6 +89,16 @@ def classify(
             iv_moved = True
             evidence.append(f"ATM IV moved {iv_change_pct:+.1%} vs prior day")
 
+    # ── EIA supply signal ──
+    if eia_supply_signal == "draw":
+        evidence.append(f"EIA: crude stock draw (supply tightening)")
+        if eia_scenario_trigger == "bull_confirmed":
+            evidence.append("EIA draw exceeds bull scenario threshold (>3M bbl)")
+    elif eia_supply_signal == "build":
+        evidence.append(f"EIA: crude stock build (supply loosening)")
+        if eia_scenario_trigger in ("bear_watch", "bear_confirmed"):
+            evidence.append(f"EIA build triggers {eia_scenario_trigger}")
+
     # ── Classify ──
     futures_moved = abs(front_back_slope) > 0.05 or (prior_slope is not None and abs(front_back_slope - prior_slope) > 0.05)
 
@@ -101,11 +113,15 @@ def classify(
 
     elif futures_signal == options_signal == "upside":
         state = "confirmed_upside_risk"
-        confidence = "high"
+        confidence = "high" if eia_supply_signal == "draw" else "high"
+        if eia_supply_signal == "draw":
+            evidence.append("all three signals aligned: futures backwardation + call skew + EIA draw")
 
     elif futures_signal == options_signal == "downside":
         state = "confirmed_downside_risk"
         confidence = "high"
+        if eia_supply_signal == "build":
+            evidence.append("all three signals aligned: futures contango + put skew + EIA build")
 
     elif futures_signal == "upside" and options_signal == "downside":
         state = "cross_market_disagreement"

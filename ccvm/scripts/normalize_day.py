@@ -22,8 +22,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
+from dotenv import load_dotenv
+load_dotenv(Path(__file__).parent.parent / ".env")
+
 from ccvm.parsers import bronze_eia, bronze_futures, bronze_options
-from ccvm.normalizers import silver_futures, silver_options
+from ccvm.normalizers import silver_futures, silver_options, silver_eia
+from ccvm.analytics import eia_features
 from ccvm.storage.manifest_db import ManifestDB
 from ccvm.storage.parquet_store import ParquetStore
 from ccvm.validation import quality_report
@@ -110,9 +114,10 @@ def main() -> None:
         except Exception as exc:
             logger.error("Failed to normalize options %s: %s", raw_path.name, exc)
 
-    # --- Bronze: EIA ---
+    # --- Bronze + Silver + Gold: EIA ---
     eia_entries = [e for e in date_entries if "eia" in e.get("source_id", "")]
     silver_eia_table = None
+    bronze_eia_tables = []
     for entry in eia_entries:
         raw_path = Path(entry["raw_path"])
         if not raw_path.exists():
@@ -122,10 +127,30 @@ def main() -> None:
         try:
             bronze_table = bronze_eia.parse(raw_path, sha256)
             logger.info("Bronze EIA: %d rows from %s", len(bronze_table), raw_path.name)
-            pq_store.write("bronze", "eia", as_of_str, bronze_table)
-            silver_eia_table = bronze_table  # EIA bronze is already normalized
+            bronze_eia_tables.append(bronze_table)
         except Exception as exc:
             logger.error("Failed to parse EIA %s: %s", raw_path.name, exc)
+
+    if bronze_eia_tables:
+        import pyarrow as pa
+        combined_bronze = pa.concat_tables(bronze_eia_tables)
+        pq_store.write("bronze", "eia", as_of_str, combined_bronze)
+
+        silver_eia_table = silver_eia.normalize(combined_bronze, as_of)
+        pq_store.write("silver", "eia", as_of_str, silver_eia_table)
+        pass_n = sum(1 for s in silver_eia_table.column("silver_status").to_pylist() if s == "PASS")
+        logger.info("Silver EIA: %d rows, %d PASS", len(silver_eia_table), pass_n)
+
+        gold_eia_table = eia_features.compute(silver_eia_table, as_of)
+        pq_store.write("gold", "eia_features", as_of_str, gold_eia_table)
+        gd = gold_eia_table.to_pydict()
+        logger.info(
+            "Gold EIA: period=%s  crude_draw=%.0f MBBL  supply_signal=%s  scenario_trigger=%s",
+            gd["eia_period"][0],
+            gd["crude_draw"][0] or 0,
+            gd["supply_signal"][0],
+            gd["scenario_trigger"][0],
+        )
 
     # --- Quality report ---
     report = quality_report.generate(
