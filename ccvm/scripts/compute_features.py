@@ -36,7 +36,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", required=True)
-    parser.add_argument("--prior-date", help="Prior trade date for returns/IV change")
+    parser.add_argument("--prior-date", help="Prior trade date for returns/IV change (inferred if omitted)")
     args = parser.parse_args()
 
     try:
@@ -47,6 +47,14 @@ def main() -> None:
 
     pq = ParquetStore(DATA_DIR)
     as_of_str = args.date
+
+    # Infer prior date from available silver futures if not supplied
+    if not args.prior_date:
+        available = pq.list_dates("silver", "futures")
+        earlier = [d for d in available if d < as_of_str]
+        args.prior_date = earlier[-1] if earlier else None
+        if args.prior_date:
+            logger.info("Inferred prior date: %s", args.prior_date)
 
     # ── Silver futures ──
     if not pq.exists("silver", "futures", as_of_str):
